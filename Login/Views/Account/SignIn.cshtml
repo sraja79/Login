@@ -1,0 +1,69 @@
+﻿@model Login.Models.SignInModel
+
+@{
+    ViewData["Title"] = "SignIn";
+}
+ 
+
+<div class="row  bg-gradient">
+      <div class="col-md-4">
+          <img src="/images/Welcome.jpeg" style="width:400px;height:500px"/>
+          </div>
+    <div class="col-md-4">
+        <h2> Internal Login User </h2>
+        <form  asp-action="SignIn" asp-controller="Account">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Mail" class="control-label"></label>
+                <input asp-for="Mail" class="form-control" />
+                <span asp-validation-for="Mail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Rememberme" /> @Html.DisplayNameFor(model => model.Rememberme)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-warning" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-1 " style="border-right: 1px solid #333;"></div>
+<div class="col-md-3 ">
+<h1> External Login User </h1>
+        @{
+            if(Model!=null)
+            {
+            if(Model.ExternalLogin.Count==0)
+            {
+                    <div> No External Login Configured </div>
+            }
+            else
+            {
+                    <form method="post" asp-action="ExternalLogin" asp-route-returnurl=@Model.ReturnUrl>
+                    
+                 
+                    @foreach(var ExternalProvider in Model.ExternalLogin)
+                {
+                          <input type="submit" value="@ExternalProvider.Name" name="ExternalProvider" class="btn btn-warning" />
+                }
+                       </form>
+            }
+            }
+        }
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a><br />
+      <a asp-action="ForgotPassword" asp-controller="Account">Forgot Password</a>
+</div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
